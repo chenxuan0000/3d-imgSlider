@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/demo.css">
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <title>css-slider</title>
+</head>
+
+<body>
+    <div class="css3Slider" id="css3Slider">
+        <div class="animation-father">
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img1.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img2.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img3.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img4.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img5.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img6.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img7.jpg"></a>
+            </figure>
+            <figure class="animation-child">
+                <a href="http://www.baidu.com"><img src="img/img8.jpg"></a>
+            </figure>
+        </div>
+    </div>
+    <script src="js/hammer.min.js"></script>
+    <script type="text/javascript" src="js/css3Slider.min.js"></script>
+    <script type="text/javascript">
+    $.fn.css3Slider({
+        clickFront: true,
+        // autoPlay: true,
+        // hoverParse: false,
+        swiftMove: true,
+        // animationTime: '32'
+    });
+
+    //  $.fn.css3Slider.defaults = {
+    //     containerId: 'css3Slider',
+    //     containerWidth: '500',
+    //     containerHeight: '300',
+    //     perspective: '1400',
+    //     autoPlay: false,
+    //     hoverParse: true,
+    //     clickFront: true,  
+    //     swiftMove: true,   //swiftMove配置为true 需要引入hammer.min.js
+    //     animationTime: '12',
+    //     translateZmore: '100'
+    // };
+    </script>
+</body>

@@ -1,0 +1,226 @@
+﻿/* yui3 reset.css */
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td
+{
+    margin: 0;
+    padding: 0;
+}
+
+table
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+fieldset,
+img
+{
+    border: 0;
+}
+
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var
+{
+    font-style: normal;
+    font-weight: normal;
+}
+
+ol,
+ul
+{
+    list-style: none;
+}
+
+a
+{
+    text-decoration: none;
+    color: #333;
+}
+
+caption,
+th
+{
+    text-align: left;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+{
+    font-size: 100%;
+    font-weight: normal;
+}
+
+q:before,
+q:after
+{
+    content: '';
+}
+
+abbr,
+acronym
+{
+    border: 0;
+    font-variant: normal;
+}
+
+sup
+{
+    vertical-align: text-top;
+}
+
+sub
+{
+    vertical-align: text-bottom;
+}
+
+input,
+button,
+textarea,
+select
+{
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    *font-size: 100%;
+}
+
+
+legend
+{
+    color: #000;
+}
+
+iframe
+{
+    display: block;
+}
+
+
+/* yui3 fonts */
+
+body
+{
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    color: #333;
+    -webkit-text-size-adjust: none;
+}
+
+select,
+input,
+button,
+textarea
+{
+    font: 99% arial, "Microsoft Yahei", helvetica, clean, sans-serif;
+}
+
+table
+{
+    font-size: inherit;
+    font: 100%;
+}
+
+pre,
+code,
+kbd,
+samp,
+tt
+{
+    font-family: monospace;
+    *font-size: 108%;
+    line-height: 100%;
+}
+
+/* ie下点击出现虚线框 */
+a,
+span,
+input,
+select,
+textarea,
+button {
+    outline: none;
+}
+
+
+/* utilities */
+
+.center-block
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.clearfix
+{
+    *zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after
+{
+    display: table;
+    line-height: 0;
+    content: "";
+}
+
+.clearfix:after
+{
+    clear: both;
+}
+
+.l
+{
+    float: left !important;
+}
+
+.r
+{
+    float: right !important;
+}
+
+.hidden
+{
+    display: none !important;
+}
+
+.invisible
+{
+    visibility: hidden !important;
+}
+
