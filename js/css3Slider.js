@@ -90,8 +90,9 @@
         // Hammer 
         if (opts.swiftMove) {
             // pan设置左右触屏滚动
-            new Hammer($father[0]).on("panmove", function(ev) {
+            new Hammer($father[0]).on("panstart", function(ev) {
                 ev.preventDefault();
+            }).on("panmove", function(ev) {
                 var floor = Math.floor((ev.deltaX) / 225),
                     floor1 = floor * 45,
                     x = swiftDeg + rotateYDeg + floor1;
