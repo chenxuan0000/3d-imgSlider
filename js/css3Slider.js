@@ -15,13 +15,14 @@
             newIndex = 0,
             rotateYDeg = 0,
             swiftDeg = 0,
+            panUpDownDeg = 0,
             translateZ = opts.containerWidth / (2 * Math.tan(pi)),
             keyframes = "@keyframes scroll{0% {transform: translateZ( -" + translateZ + "px) rotateY(0deg);}\n" +
             "100%{transform: translateZ( -" + translateZ + "px) rotateY(360deg);}}";
 
         $father.height(opts.containerHeight)
             .width(opts.containerWidth)
-            .css('perspective', opts.perspective + 'px');
+            .css({ 'perspective': opts.perspective + 'px', 'perspectiveOrigin': opts.rotateX + ' ' + opts.rotateY });
         $children.css("transform", " translateZ( -" + translateZ + "px)");
         $grandson.each(function(i, e) {
             e.style.transform = 'rotateY( ' + i * deg + 'deg) translateZ( ' + translateZ + 'px)';
@@ -49,7 +50,31 @@
         $children.on("mousedown", 'img', function(e) {
             e.preventDefault();
         });
+        // mousewheel 
+        if (!opts.autoPlay && !opts.swiftMove && !opts.clickFront && opts.mousewheel) {
+            // 鼠标滚轮滚动时间
+            $children.on("mousewheel DOMMouseScroll", function(e) {
+                var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || // chrome & ie
+                    (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1)); // firefox
 
+                if (delta > 0) {
+                    // 向上滚
+                    rotateYDeg += deg;
+                    $children.css({
+                        "transition": "transform 1s",
+                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + rotateYDeg + "deg)"
+                    });
+                } else if (delta < 0) {
+                    // 向下滚
+                    rotateYDeg -= deg;
+                    $children.css({
+                        "transition": "transform 1s",
+                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + rotateYDeg + "deg)"
+                    });
+                }
+            });
+
+        }
         // 单击块 当前块置前
         if (!opts.autoPlay && !opts.swiftMove && opts.clickFront) {
             var clickFront = function(e) {
@@ -86,7 +111,16 @@
             };
             $children.on("click", ".animation-child", clickFront);
         };
-
+        // 算法获取当前对面屏幕位置居高rotateX("+opts.rotateX+") 
+        var getRealRotateX = function(deg) {
+            var x = Math.abs(deg % 360 / 360);
+            // 判断位置变化量
+            if (x === 0.5) {
+                return -1;
+            } else {
+                return (1 - 2 * x);
+            }
+        };
         // Hammer 
         if (opts.swiftMove) {
             // pan设置左右触屏滚动
@@ -103,6 +137,17 @@
             }).on("panend", function(ev) {
                 swiftDeg = swiftDeg + Math.floor((ev.deltaX) / 225) * 45;
             });
+
+            if (opts.swiftUpDown) {
+                var upDown = function(ev) {
+                    var floor = Math.floor((ev.deltaY) * (-1) / 100);
+                    panUpDownDeg = panUpDownDeg + floor;
+                    $children.css("transform", " translateZ( -" + translateZ + "px)");
+                };
+                // pan设置上下触屏翻转
+                new Hammer($('body')[0]).on("panup", upDown).on("pandown", upDown);
+            }
+
         }
 
     };
@@ -112,10 +157,14 @@
         containerWidth: '500',
         containerHeight: '300',
         perspective: '1400',
+        rotateX: '50%',
+        rotateY: '50%',
         autoPlay: false,
         hoverParse: true,
+        mousewheel: true,
         clickFront: true,
         swiftMove: true,
+        swiftUpDown: true,
         animationTime: '12',
         translateZmore: '100'
     };

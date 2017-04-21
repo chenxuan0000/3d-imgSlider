@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="renderer" content="webkit">
+   <!--  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"> -->
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/demo.css">
     <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
@@ -15,28 +16,28 @@
     <div class="css3Slider" id="css3Slider">
         <div class="animation-father">
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img1.jpg"></a>
+                <a href="javascript:;"><img src="img/img1.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img2.jpg"></a>
+                <a href="javascript:;"><img src="img/img2.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img3.jpg"></a>
+                <a href="javascript:;"><img src="img/img3.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img4.jpg"></a>
+                <a href="javascript:;"><img src="img/img4.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img5.jpg"></a>
+                <a href="javascript:;"><img src="img/img5.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img6.jpg"></a>
+                <a href="javascript:;"><img src="img/img6.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img7.jpg"></a>
+                <a href="javascript:;"><img src="img/img7.jpg"></a>
             </figure>
             <figure class="animation-child">
-                <a href="http://www.baidu.com"><img src="img/img8.jpg"></a>
+                <a href="javascript:;"><img src="img/img8.jpg"></a>
             </figure>
         </div>
     </div>
@@ -44,10 +45,13 @@
     <script type="text/javascript" src="js/css3Slider.js"></script>
     <script type="text/javascript">
     $.fn.css3Slider({
-        clickFront: true,
+        clickFront: false,
         // autoPlay: true,
         // hoverParse: false,
         swiftMove: true,
+        // swiftUpDown: false,
+        rotateX: '0',
+        rotateY: '-50%',
         // animationTime: '32'
     });
 
