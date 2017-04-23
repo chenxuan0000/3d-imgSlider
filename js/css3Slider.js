@@ -11,10 +11,12 @@
             length = $grandson.length,
             deg = 360 / length,
             pi = Math.PI / length,
-            oldIndex = 0,
-            newIndex = 0,
-            rotateYDeg = 0,
-            swiftDeg = 0,
+            oldIndex = 0, //滚动前置前块的index
+            clickIndexAll = 0, //记录click事件导致 $children 偏移的index
+            rotateYDeg = 0, //存click事件 产生的rotateY
+            swiftDeg = 0, //存pan事件 产生的rotateY
+            wheelDeg = 0, ////存mousewheel事件 产生的rotateY
+            panStartFalg = true, //开关防止 pan事件时候触发 click事件
             panUpDownDeg = 0,
             translateZ = opts.containerWidth / (2 * Math.tan(pi)),
             keyframes = "@keyframes scroll{0% {transform: translateZ( -" + translateZ + "px) rotateY(0deg);}\n" +
@@ -22,7 +24,10 @@
 
         $father.height(opts.containerHeight)
             .width(opts.containerWidth)
-            .css({ 'perspective': opts.perspective + 'px', 'perspectiveOrigin': opts.rotateX + ' ' + opts.rotateY });
+            .css({
+                'perspective': opts.perspective + 'px',
+                'perspectiveOrigin': opts.rotateX + ' ' + opts.rotateY
+            });
         $children.css("transform", " translateZ( -" + translateZ + "px)");
         $grandson.each(function(i, e) {
             e.style.transform = 'rotateY( ' + i * deg + 'deg) translateZ( ' + translateZ + 'px)';
@@ -50,92 +55,124 @@
         $children.on("mousedown", 'img', function(e) {
             e.preventDefault();
         });
+        // 获取当前 $children rotateY 
+        var getRotateYAll = function() {
+            return wheelDeg + swiftDeg + rotateYDeg;
+        };
+        // 定义个函数计算当前置前块的真实的index 
+        var countIndex = function(times) {
+            oldIndex = oldIndex + times;
+            if (oldIndex > 7) {
+                oldIndex = oldIndex % 8;
+            } else if (oldIndex < 0) {
+                oldIndex = oldIndex % 8 + length;
+            }
+
+        };
         // mousewheel 
-        if (!opts.autoPlay && !opts.swiftMove && !opts.clickFront && opts.mousewheel) {
+        if (!opts.autoPlay && opts.mousewheel) {
             // 鼠标滚轮滚动时间
             $children.on("mousewheel DOMMouseScroll", function(e) {
                 var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || // chrome & ie
                     (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1)); // firefox
-
                 if (delta > 0) {
                     // 向上滚
-                    rotateYDeg += deg;
+                    wheelDeg += deg;
                     $children.css({
                         "transition": "transform 1s",
-                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + rotateYDeg + "deg)"
+                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + getRotateYAll() + "deg)"
                     });
+                    countIndex(-1);
                 } else if (delta < 0) {
                     // 向下滚
-                    rotateYDeg -= deg;
+                    wheelDeg -= deg;
                     $children.css({
                         "transition": "transform 1s",
-                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + rotateYDeg + "deg)"
+                        "transform": " translateZ( -" + translateZ + "px) rotateY(" + getRotateYAll() + "deg)"
                     });
+                    countIndex(1);
                 }
             });
 
         }
         // 单击块 当前块置前
-        if (!opts.autoPlay && !opts.swiftMove && opts.clickFront) {
+        if (!opts.autoPlay && opts.clickFront) {
             var clickFront = function(e) {
-                e.preventDefault();
-                var $this = $(this),
-                    index = $this.index(),
-                    moveIndex;
-                // 判断位置变化量
-                switch (index - oldIndex) {
-                    case 1 - length:
-                        moveIndex = 1;
-                        break;
-                    case length - 1:
-                        moveIndex = -1;
-                        break;
-                    default:
-                        moveIndex = index - oldIndex;
-                        break;
+                //开关 判断是否和pan事件冲突并发
+                if (panStartFalg) {
+                    e.preventDefault();
+                    var $this = $(this),
+                        index = $this.index(),
+                        moveIndex;
+                    // 判断位置变化量
+                    switch (index - oldIndex) {
+                        case 1 - length:
+                            moveIndex = 1;
+                            break;
+                        case length - 1:
+                            moveIndex = -1;
+                            break;
+                        default:
+                            moveIndex = index - oldIndex;
+                            break;
+                    }
+                    clickIndexAll += moveIndex;
+                    oldIndex = index;
+                    rotateYDeg = clickIndexAll * deg * (-1);
+                    //根据位置newIndex进行css3动画
+                    if (moveIndex) {
+                        // 移动了进去动画
+                        $children.css({
+                            "transition": "transform " + Math.abs(moveIndex) + "s",
+                            "transform": " translateZ( -" + translateZ + "px) rotateY(" + getRotateYAll() + "deg)"
+                        });
+                    }
+
+                    //判断是否存在a 动画延迟完实现
+                    if ($this.find('a').length) {
+                        setTimeout(function() {
+                            location.href = $this.find('a')[0].href;
+                        }, Math.abs(moveIndex) * 1000)
+                    }
                 }
-                oldIndex = index;
-                newIndex += moveIndex;
-                rotateYDeg = swiftDeg + newIndex * deg * (-1);
-                //根据位置newIndex进行css3动画
-                $children.css({
-                    "transition": "transform " + Math.abs(moveIndex) + "s",
-                    "transform": " translateZ( -" + translateZ + "px) rotateY(" + rotateYDeg + "deg)"
-                });
-                //判断是否存在a 动画延迟完实现
-                if ($this.find('a').length) {
-                    setTimeout(function() {
-                        location.href = $this.find('a')[0].href;
-                    }, Math.abs(moveIndex) * 1000)
-                }
+
             };
+
             $children.on("click", ".animation-child", clickFront);
         };
-        // 算法获取当前对面屏幕位置居高rotateX("+opts.rotateX+") 
-        var getRealRotateX = function(deg) {
-            var x = Math.abs(deg % 360 / 360);
-            // 判断位置变化量
-            if (x === 0.5) {
-                return -1;
-            } else {
-                return (1 - 2 * x);
-            }
-        };
+
         // Hammer 
         if (opts.swiftMove) {
             // pan设置左右触屏滚动
             new Hammer($father[0]).on("panstart", function(ev) {
+                panStartFalg = false;
                 ev.preventDefault();
             }).on("panmove", function(ev) {
-                var floor = Math.floor((ev.deltaX) / 225),
-                    floor1 = floor * 45,
-                    x = swiftDeg + rotateYDeg + floor1;
+                if (ev.deltaX > 0) {
+                    var floor = Math.ceil((ev.deltaX) / 225);
+                } else {
+                    var floor = Math.floor((ev.deltaX) / 225);
+                }
+                var x = getRotateYAll() + floor * 45;
+
                 $children.css({
                     "transition": "transform " + Math.abs(Math.floor(floor)) + "s",
                     "transform": " translateZ( -" + translateZ + "px) rotateY(" + x + "deg)"
                 });
+
             }).on("panend", function(ev) {
-                swiftDeg = swiftDeg + Math.floor((ev.deltaX) / 225) * 45;
+                if (ev.deltaX > 0) {
+                    var floor = Math.ceil((ev.deltaX) / 225);
+                } else {
+                    var floor = Math.floor((ev.deltaX) / 225);
+                }
+                //重学oldIndex 为什么要在定时器里？ 因为这个pan在浏览器上存在bug拖了可能没转
+                //可以防止panmove拖动小距离闪动导致无动作h
+                setTimeout(function() {
+                    countIndex(floor * (-1));
+                }, 0);
+                swiftDeg += floor * 45;
+                panStartFalg = true;
             });
 
             if (opts.swiftUpDown) {
@@ -146,6 +183,7 @@
                 };
                 // pan设置上下触屏翻转
                 new Hammer($('body')[0]).on("panup", upDown).on("pandown", upDown);
+
             }
 
         }
