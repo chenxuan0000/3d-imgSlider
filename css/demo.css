@@ -1,9 +1,13 @@
 ﻿
 .css3Slider {
-    
     margin: 100px auto;
 }
 
+figure {
+    color: #000;
+    font-size: 33px;
+    text-align: center;
+}
 
 .animation-father {
     position: absolute;
