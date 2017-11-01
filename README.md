@@ -3,7 +3,7 @@
 ## Usage
 创建一个dom容器
 
-```
+```html
 <div class="css3Slider" id="css3Slider">
         <div class="animation-father">
             <figure class="animation-child">0
@@ -35,7 +35,7 @@
 ```
 
 引入需要的css js
-```
+```html
 <link rel="stylesheet" href="css/common.css"> //reset
 <link rel="stylesheet" href="css/demo.css"> //demo.css
 <script src="js/hammer.min.js"></script> //手势库插件 需要的话
@@ -44,7 +44,7 @@
 ```
 
 初始化js
-```
+```javascript
   $.fn.css3Slider = {
          containerId: 'css3Slider',
          containerWidth: '500',
